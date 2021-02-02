@@ -17,3 +17,9 @@ let checkStringLength = function(userString, maxLength){
   return true;
 }
 
+for (let index = 0; index < 100; index++) {
+  console.log(getRandomIntInclusive(100, 50));
+}
+
+console.log(checkStringLength("JScript", 5));
+
