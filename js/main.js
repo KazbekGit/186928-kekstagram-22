@@ -16,38 +16,74 @@ let checkStringLength = function(userString, maxLength){
   return true;
 }
 
-let ARRAY_LENGTH = 25;
-let INITIAL_VALUE = 1;
-let END_VALUE = 25;
-
 getRandomIntInclusive(100, 50);
 checkStringLength('JScript', 5);
 
 let usedValues = [];
-let getUniqueValue = function(){
-  let currentValue = getRandomIntInclusive(INITIAL_VALUE, END_VALUE);
-  usedValues.forEach(element => {
+let currentValue;
+let getUniqueValue = function(initialValue, endValue){
+  currentValue = getRandomIntInclusive(initialValue, endValue);
+  /*   usedValues.forEach(element => {
     if(element === currentValue) getUniqueValue();
-  });
+  }); */
   usedValues.push(currentValue);
   return currentValue;
 }
 
+/* let usedValues = [];
+let getUniqueValue = function(initialValue, endValue){
+  let isUnique = false;
+  let currentValue;
+  while(!isUnique){
+    currentValue = getRandomIntInclusive(initialValue, endValue);
+    let isInArray = false;
+    for (let index = 0; index < usedValues.length; index++) {
+      if(currentValue === usedValues[index]) isInArray = true;
+    }
+    isUnique = !isInArray;
+  }
+  return currentValue;
+} */
+
+let getRndArrayElement = function(arr){
+  return arr[getRandomIntInclusive(0, arr.length - 1)];
+}
+
+let messages = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
+
+let names = ['Егор', 'Людвиг', 'Арина', 'Артём', 'Кристина', 'Вероника', 'Хуан', 'Алексей Н. из Москвы', 'Роман'];
+
+let photosDescription = ['Прошлое лето было восхитительным!', 'Потрясающий вид! Скоро повторим', 'Я счастлив как никогда!', 'На вебинаре #HTMLAcademy.)', 'Мой кот полон забот! Мяу!))', 'Новая история, новые приключения!', 'Сани для Сани'];
+
+function Comments () {
+  this.id = getUniqueValue(1, 1000);
+  this.avatar = `img/avatar-${getUniqueValue(1, 6)}.svg`;
+  this.message = getRndArrayElement(messages);
+  this.name = getRndArrayElement(names);
+}
+
 function PhotoDescrition() {
-  this.id = getUniqueValue();
-  this.url = `photos/${getUniqueValue()}.jpg`
-  this.description = ['Массив описания'];
+  this.id = getUniqueValue(1, 25);
+  this.url = `photos/${getUniqueValue(1, 25)}.jpg`
+  this.description = getRndArrayElement(photosDescription);
   this.likes = getRandomIntInclusive(15, 200);
-  this.comments = [{},{},{}];
+  this.comments = function(){
+    let commentsArr = [];
+    for (let index = 0; index < getRandomIntInclusive(1, 15); index++) {
+      commentsArr.push(new Comments());
+    }
+    return commentsArr;
+  };
 }
 
-let PhotoDescritionArray = [];
-for (let index = 0; index < ARRAY_LENGTH; index++) {
-  PhotoDescritionArray[index] = new PhotoDescrition();
+let makePhotoDescriptionArray = function(photosNum) {
+  let PhotoDescritionArray = [];
+  for (let index = 0; index < photosNum; index++) {
+    PhotoDescritionArray[index] = new PhotoDescrition();
+  }
+  return PhotoDescritionArray;
 }
 
-PhotoDescritionArray.forEach(element => {
-  console.log(element.id);
-  console.log(element.url);
-});
-
+makePhotoDescriptionArray(25);
