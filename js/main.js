@@ -19,14 +19,22 @@ const checkStringLength = function(userString, maxLength){
 getRandomIntInclusive(100, 50);
 checkStringLength('JScript', 5);
 
-const usedValues = {};
-let getUniqueValue = function unique(initial, end) {
-  let currentValue = getRandomIntInclusive(initial, end);
-  return !usedValues[currentValue] ? usedValues[currentValue] = currentValue : unique(initial, end);
-};
-
 const getRndArrayElement = function(arr){
   return arr[getRandomIntInclusive(0, arr.length - 1)];
+}
+
+function makeUnique(){
+  let usedValues = {};
+  const unique = function(initial, end){
+    let currentValue = getRandomIntInclusive(initial, end);
+    if(!usedValues[currentValue]){
+      usedValues[currentValue] = currentValue;
+      return currentValue;
+    }else{
+      return unique(initial, end);
+    }
+  }
+  return unique;
 }
 
 let messages = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -37,16 +45,21 @@ let names = ['Егор', 'Людвиг', 'Арина', 'Артём', 'Крист
 
 let photosDescription = ['Прошлое лето было восхитительным!', 'Потрясающий вид! Скоро повторим', 'Я счастлив как никогда!', 'На вебинаре #HTMLAcademy.)', 'Мой кот полон забот! Мяу!))', 'Новая история, новые приключения!', 'Сани для Сани'];
 
+const uniquePhotoId = makeUnique();
+const uniquePhotoURL = makeUnique();
+const uniqueCommentsId = makeUnique();
+const uniqueCommentsAvatar = makeUnique();
+
 function Comments () {
-  this.id = getUniqueValue(1, 1000);
-  this.avatar = `img/avatar-${getUniqueValue(1, 6)}.svg`;
+  this.id = uniqueCommentsId(1, 1000);
+  this.avatar = `img/avatar-${uniqueCommentsAvatar(1, 6)}.svg`;
   this.message = getRndArrayElement(messages);
   this.name = getRndArrayElement(names);
 }
 
 function PhotoDescrition() {
-  this.id = getUniqueValue(1, 25);
-  this.url = `photos/${getUniqueValue(1, 25)}.jpg`
+  this.id = uniquePhotoId(1, 25);
+  this.url = `photos/${uniquePhotoURL(1, 25)}.jpg`
   this.description = getRndArrayElement(photosDescription);
   this.likes = getRandomIntInclusive(15, 200);
   this.comments = function(){
@@ -66,4 +79,4 @@ const makePhotoDescriptionArray = function(photosNum) {
   return PhotoDescritionArray;
 }
 
-makePhotoDescriptionArray(12); //Здесь по заданию должно создаваться 25 объектов. Когда их более 12 - переполняется стек.
+makePhotoDescriptionArray(25); 
