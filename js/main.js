@@ -1,4 +1,3 @@
-/* https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random */
 function getRandomIntInclusive(min, max) {
   if (min < 0) min = 0;
   if (max < 0) max = 0;
@@ -12,7 +11,7 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
 }
 
-let checkStringLength = function(userString, maxLength){
+const checkStringLength = function(userString, maxLength){
   if (userString.length > maxLength) return false;
   return true;
 }
@@ -20,3 +19,64 @@ let checkStringLength = function(userString, maxLength){
 getRandomIntInclusive(100, 50);
 checkStringLength('JScript', 5);
 
+const getRndArrayElement = function(arr){
+  return arr[getRandomIntInclusive(0, arr.length - 1)];
+}
+
+function makeUnique(){
+  let usedValues = {};
+  const unique = function(initial, end){
+    let currentValue = getRandomIntInclusive(initial, end);
+    if(!usedValues[currentValue]){
+      usedValues[currentValue] = currentValue;
+      return currentValue;
+    }else{
+      return unique(initial, end);
+    }
+  }
+  return unique;
+}
+
+let messages = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
+
+let names = ['Егор', 'Людвиг', 'Арина', 'Артём', 'Кристина', 'Вероника', 'Хуан', 'Алексей Н. из Москвы', 'Роман'];
+
+let photosDescription = ['Прошлое лето было восхитительным!', 'Потрясающий вид! Скоро повторим', 'Я счастлив как никогда!', 'На вебинаре #HTMLAcademy.)', 'Мой кот полон забот! Мяу!))', 'Новая история, новые приключения!', 'Сани для Сани'];
+
+const uniquePhotoId = makeUnique();
+const uniquePhotoURL = makeUnique();
+const uniqueCommentsId = makeUnique();
+const uniqueCommentsAvatar = makeUnique();
+
+function Comments () {
+  this.id = uniqueCommentsId(1, 1000);
+  this.avatar = `img/avatar-${uniqueCommentsAvatar(1, 6)}.svg`;
+  this.message = getRndArrayElement(messages);
+  this.name = getRndArrayElement(names);
+}
+
+function PhotoDescrition() {
+  this.id = uniquePhotoId(1, 25);
+  this.url = `photos/${uniquePhotoURL(1, 25)}.jpg`
+  this.description = getRndArrayElement(photosDescription);
+  this.likes = getRandomIntInclusive(15, 200);
+  this.comments = function(){
+    let commentsArr = [];
+    for (let index = 0; index < getRandomIntInclusive(1, 15); index++) {
+      commentsArr.push(new Comments());
+    }
+    return commentsArr;
+  };
+}
+
+const makePhotoDescriptionArray = function(photosNum) {
+  let PhotoDescritionArray = [];
+  for (let index = 0; index < photosNum; index++) {
+    PhotoDescritionArray[index] = new PhotoDescrition();
+  }
+  return PhotoDescritionArray;
+}
+
+makePhotoDescriptionArray(25); 
